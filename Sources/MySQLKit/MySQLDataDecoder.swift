@@ -30,7 +30,7 @@ public struct MySQLDataDecoder: Sendable {
     /// - Returns: The decoded value, if successful.
     public func decode<T: Decodable>(_ type: T.Type, from data: MySQLData) throws -> T {
         // If `T` can be converted directly, just do so.
-        if let convertible = T.self as? any MySQLDataConvertible.Type {
+        if let convertible = T.self as? any MySQLDataConvertible.Type && !(T is Optional<Any>.Type) {
             guard let value = convertible.init(mysqlData: data) else {
                 throw DecodingError.typeMismatch(T.self, .init(
                     codingPath: [],
